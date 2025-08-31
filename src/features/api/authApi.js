@@ -1,13 +1,22 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { userLoggedIn, userLoggedOut } from "../authSlice";
 
-const USER_API = "http://localhost:4000/api/v1/user/";
+// const USER_API = "http://localhost:4000/api/v1/user/";
+
+const USER_API = "https://e-learningserver-r4a8.onrender.com/api/v1/user/";
 
 export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({
     baseUrl: USER_API,
-    credentials: "include"
+     credentials:"include",
+         prepareHeaders: (headers) => {
+        const token = localStorage.getItem("token"); // Get token from localStorage
+        if (token) {
+            headers.set("Authorization", `Bearer ${token}`); // Set token in header
+        }
+        return headers;
+    }
   }),
   endpoints: (builder) => ({
     signupUser: builder.mutation({
@@ -26,7 +35,8 @@ export const authApi = createApi({
       async onQueryStarted(arg, {queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled;
-          console.log("loginUser result->",result)
+          console.log("loginUser result->",result)    
+          localStorage.setItem("token", result.data.token);
           dispatch(userLoggedIn({ user:result.data.user }));
         } catch (err) {
           console.log(err);

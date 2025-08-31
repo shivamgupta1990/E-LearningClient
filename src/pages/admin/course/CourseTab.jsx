@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/select";
 import { Loader2 } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useEditCourseMutation, useGetCourseByIdQuery, usePublishCourseMutation } from '@/features/api/courseApi';
+import { useDeleteCourseMutation, useEditCourseMutation, useGetCourseByIdQuery, usePublishCourseMutation } from '@/features/api/courseApi';
 import { toast } from 'sonner';
 
 export const CourseTab = () => {
@@ -32,9 +32,9 @@ export const CourseTab = () => {
         coursePrice: "",
         courseThumbnail: ""
     });
-    const { data: courseByIdData, isLoading: courseByIdLoading ,refetch} = useGetCourseByIdQuery(courseId);
-
-    const [publishCourse,{}]=usePublishCourseMutation();
+    const { data: courseByIdData, isLoading: courseByIdLoading, refetch } = useGetCourseByIdQuery(courseId);
+    const [deleteCourse, { data: deleteCourseData, isLoading: deleteCourseIsLoading, isSuccess: deleteCourseIsSuccess }] = useDeleteCourseMutation();
+    const [publishCourse, { }] = usePublishCourseMutation();
     useEffect(() => {
         if (courseByIdData?.course) {
             const course = courseByIdData?.course;
@@ -43,9 +43,9 @@ export const CourseTab = () => {
                 subTitle: course.subTitle,
                 description: course.description,
                 category: course.category,
-                courseLevel:course.courseLevel ,
-                coursePrice: course.coursePrice ,
-                courseThumbnail:course.courseThumbnail
+                courseLevel: course.courseLevel,
+                coursePrice: course.coursePrice,
+                courseThumbnail: course.courseThumbnail
             });
         }
     }, [courseByIdData])
@@ -87,7 +87,7 @@ export const CourseTab = () => {
         formData.append("courseThumbnail", input.courseThumbnail);
         await editCourse({ formData, courseId });
 
-        
+
     }
     useEffect(() => {
         if (isSuccess) {
@@ -98,19 +98,30 @@ export const CourseTab = () => {
         }
     }, [isSuccess, isError]);
 
-    const publishStatusHandler=async(action)=>{
-        try{
-            const response=await publishCourse({courseId,query:action});
-            if(response.data){
+    const publishStatusHandler = async (action) => {
+        try {
+            const response = await publishCourse({ courseId, query: action });
+            if (response.data) {
                 refetch();
                 toast.success(response.data.message);
             }
-        }catch(err){
+        } catch (err) {
             toast.error("Failed to publish or unpublish course");
         }
     }
+    useEffect(() => {
+        if (deleteCourseIsSuccess) {
+            toast.success(deleteCourseData?.message || "Course Deleted Successfully");
+            navigate(-1);
+        }
+    }, [deleteCourseIsSuccess]);
 
-    if(courseByIdLoading) return <Loader2 className='h-4 w-4 animate-spin'/>
+    const handleDeleteCourse = () => {
+        deleteCourse(courseId);
+    }
+
+
+    if (courseByIdLoading) return <Loader2 className='h-4 w-4 animate-spin' />
     return (
         <Card>
             <CardHeader className="flex flex-row justify-between">
@@ -121,12 +132,19 @@ export const CourseTab = () => {
                     </CardDescription>
                 </div>
                 <div className='space-x-2'>
-                    <Button disabled={courseByIdData?.course.lectures.length===0} variant="outline" onClick={(e)=>publishStatusHandler(courseByIdData?.course.isPublished ? "false":"true")}>
+                    <Button disabled={courseByIdData?.course.lectures.length === 0} variant="outline" onClick={(e) => publishStatusHandler(courseByIdData?.course.isPublished ? "false" : "true")}>
                         {
                             courseByIdData?.course.isPublished ? "UnPublished" : "Published"
                         }
                     </Button>
-                    <Button>Remove Course</Button>
+                    <Button disabled={deleteCourseIsLoading} variant="destructive" onClick={handleDeleteCourse}>
+                        {
+                            deleteCourseIsLoading ? <>
+                                <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                            </> : "Remove Course"
+
+                        }
+                    </Button>
                 </div>
             </CardHeader>
             <CardContent>

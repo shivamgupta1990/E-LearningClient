@@ -134,7 +134,7 @@ const MobileNavbar = ({user}) => {
                     </SheetHeader>
                     {/* <Separator className="mr-2"/> */}
                     <nav className='flex flex-col space-y-3 ml-3'>
-                        <Link to="/my-learning">My Learning</Link>
+                        <Link to="/mylearning">My Learning</Link>
                         <Link to="/profile">Edit Profile</Link>
                         <p>Log out</p>
                     </nav>

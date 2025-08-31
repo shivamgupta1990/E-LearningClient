@@ -32,7 +32,7 @@ const Login = () => {
     const [loginInput, setLoginInput] = useState({ email: "", password: "" });
     const [signupInput, setSignupInput] = useState({ name: "", email: "", password: "" });
 
-
+    // console.log("LoginData->",loginData);
 
     const changeInputHandler = (e, type) => {
         const { name, value } = e.target;
@@ -60,7 +60,7 @@ const Login = () => {
         }
 
         if (loginIsSuccess && loginData) {
-            console.log("loginData->", loginData)
+            // console.log("loginData->", loginData)
             toast.success(loginData?.message || "Login Successfull")
             navigate("/");
         }

@@ -21,7 +21,7 @@ import CourseProgress from "./pages/student/CourseProgress"
 import SearchPage from "./pages/student/SearchPage"
 import { AdminRoute, AuthenticatedUser, ProtectedRoute } from "./components/ProtectedRoutes"
 import PurchaseCourseProtectedRoute from "./components/PurchaseCourseProtectedRoute"
-// import { ThemeProvider } from "./components/ThemeProvider"
+import { ThemeProvider } from "./components/ThemeProvider"
 
 const appRouter = createBrowserRouter([
   {
@@ -33,68 +33,76 @@ const appRouter = createBrowserRouter([
         element: (
           <>
             <HeroSection />
-            <Courses/>
+            <Courses />
           </>
         )
       },
       {
-        path:"/login",
-        element:<AuthenticatedUser><Login/></AuthenticatedUser>
+        path: "/login",
+        element: <AuthenticatedUser><Login /></AuthenticatedUser>
       },
       {
-        path:"/mylearning",
-        element:<ProtectedRoute><MyLearning/></ProtectedRoute>
+        path: "/mylearning",
+        element: <ProtectedRoute><MyLearning /></ProtectedRoute>
       },
       {
-        path:"/profile",
-        element:<ProtectedRoute><Profile/></ProtectedRoute>
+        path: "/profile",
+        element: <ProtectedRoute><Profile /></ProtectedRoute>
       },
       {
-        path:"/course/search",
-        element:<ProtectedRoute><SearchPage/></ProtectedRoute>
+        path: "/profile/course-Detail/:courseId",
+        element: <ProtectedRoute><CourseDetail /></ProtectedRoute>
       },
       {
-        path:"/course-Detail/:courseId",
-        element:<ProtectedRoute><CourseDetail/></ProtectedRoute>
+        path: "/course/search",
+        element: <ProtectedRoute><SearchPage /></ProtectedRoute>
       },
       {
-        path:"/course-progress/:courseId",
+        path: "/course-Detail/:courseId",
+        element: <ProtectedRoute><CourseDetail /></ProtectedRoute>
+      },
+      {
+        path: "/mylearning/course-Detail/:courseId",
+        element: <ProtectedRoute><CourseDetail /></ProtectedRoute>
+      },
+      {
+        path: "/course-progress/:courseId",
         element:
           <ProtectedRoute>
             <PurchaseCourseProtectedRoute>
-                <CourseProgress/>
+              <CourseProgress />
             </PurchaseCourseProtectedRoute>
           </ProtectedRoute>
       },
 
       //Admin routes start from here
       {
-        path:"admin",
-        element:<AdminRoute><Sidebar/></AdminRoute>,
-        children:[
+        path: "admin",
+        element: <AdminRoute><Sidebar /></AdminRoute>,
+        children: [
           {
-            path:"course",
-            element:<CourseTable/>
+            path: "course",
+            element: <CourseTable />
           },
           {
-            path:"dashboard",
-            element:<Dashboard/>
+            path: "dashboard",
+            element: <Dashboard />
           },
           {
-            path:"course/create",
-            element:<AddCourse/>
+            path: "course/create",
+            element: <AddCourse />
           },
           {
-            path:"course/:courseId",
-            element:<EditCourse/>
+            path: "course/:courseId",
+            element: <EditCourse />
           },
           {
-            path:"course/:courseId/lecture",
-            element:<CreateLecture/>
+            path: "course/:courseId/lecture",
+            element: <CreateLecture />
           },
           {
-            path:"course/:courseId/lecture/:lectureId",
-            element:<EditLecture/>
+            path: "course/:courseId/lecture/:lectureId",
+            element: <EditLecture />
           },
         ]
       }
@@ -108,9 +116,9 @@ function App() {
 
   return (
     <>
-    {/* <ThemeProvider> */}
-        <RouterProvider router={appRouter}/>
-    {/* </ThemeProvider> */}
+      <ThemeProvider>
+        <RouterProvider router={appRouter} />
+      </ThemeProvider>
     </>
   )
 }

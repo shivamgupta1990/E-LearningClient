@@ -5,7 +5,7 @@ import { Separator } from '@/components/ui/separator'
 import React, { useState } from 'react'
 
 const categories = [
-  { id: "nextjs", label: "Next JS" },
+  { id: "next js", label: "Next JS" },
   { id: "data science", label: "Data Science" },
   { id: "frontend development", label: "Frontend Development" },
   { id: "fullstack development", label: "Fullstack Development" },

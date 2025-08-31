@@ -14,7 +14,6 @@ export default function CourseProgress() {
   
   const [updateLectureProgress]=useUpdateLectureProgressMutation();
   const [completeCourse,{data:markCompleteData,isSuccess:completedSuccess}]=useCompleteCourseMutation();
-  console.log("courseId123->",courseId);
   const [inCompleteCourse,{data:markInCompleteData,isSuccess:inCompleteSuccess}]=useInCompleteCourseMutation();
 
   useEffect(()=>{

@@ -41,7 +41,7 @@ export default function Profile() {
         return <h1>Profile Loading...</h1>
     }
     console.log("Data->",data);
-    const {user}=data;
+    const user=data.user;
 
     const updateUserHandler =async()=>{
         console.log("updated Profile Data->",name,profilePhoto);
@@ -128,11 +128,11 @@ export default function Profile() {
                 <h1 className='font-medium text-lg'>Courses you're enrooled in</h1>
                 <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 my-5'>
                     {
-                        user?.enrolledCourses.length===0 ?(
+                        user?.enrolledCourses?.length===0 ?(
                             <h1>You haven't enrolled yet</h1>
 
                         ): (
-                            user?.enrolledCourses.map((course)=><Course course={course} key={course._id}/>)
+                            user?.enrolledCourses?.map((course)=><Course course={course} key={course._id}/>)
                         )
                     }
                 </div>

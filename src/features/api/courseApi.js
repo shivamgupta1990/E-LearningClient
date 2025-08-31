@@ -1,12 +1,20 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-const COURSE_API="http://localhost:4000/api/v1/course"
+// const COURSE_API="http://localhost:4000/api/v1/course"
+const COURSE_API="https://e-learningserver-r4a8.onrender.com/api/v1/course"
 export const courseApi=createApi({
     reducerPath:"courseApi",
     tagTypes:["Refetch_Creator_Course","Refetch_Lecture"],
     baseQuery:fetchBaseQuery({
         baseUrl:COURSE_API,
-        credentials:"include"
+        credentials:"include",
+         prepareHeaders: (headers) => {
+        const token = localStorage.getItem("token"); // Get token from localStorage
+        if (token) {
+            headers.set("Authorization", `Bearer ${token}`); // Set token in header
+        }
+        return headers;
+    }
     }),
     endpoints:(builder)=>({
         createCourse:builder.mutation({
@@ -14,6 +22,13 @@ export const courseApi=createApi({
                 url:"",
                 method:"POST",
                 body:{courseTitle,category}
+            }),
+            invalidatesTags:["Refetch_Creator_Course"],
+        }),
+        deleteCourse:builder.mutation({
+            query:(courseId)=>({
+                url:`${courseId}`,
+                method:"POST",
             }),
             invalidatesTags:["Refetch_Creator_Course"],
         }),
@@ -111,6 +126,7 @@ export const courseApi=createApi({
 
 export const {
     useCreateCourseMutation,
+    useDeleteCourseMutation,
     useGetSearchCourseQuery,
     useGetPublishedCourseQuery,
     useGetCreatorCourseQuery,
